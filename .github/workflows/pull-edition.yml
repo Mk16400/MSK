@@ -1,0 +1,29 @@
+name: Pull latest edition
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: pull-edition
+  cancel-in-progress: false
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Fetch newest files from Google Drive feed
+        run: python3 scripts/pull_edition.py
+      - name: Commit and push if changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "Barrel & Bullion"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Auto: $(python3 -c "import json;print(json.load(open('.feed-state.json')).get('edition_title','update'))")"
+            git push
+          fi
