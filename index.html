@@ -1,0 +1,585 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Barrel & Bullion Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a commodities-desk dispatch — masthead + live tape, then market board, cause chain, stories, calendar, scenarios. Dark-first (petroleum night desk). */
+:root{
+  --bg:#0b141a; --panel:#111e26; --panel2:#16262f; --ink:#e8e4d9; --muted:#8c9ca5; --line:#223641;
+  --accent:#e6a53c; --accent-soft:rgba(230,165,60,.14);
+  --up:#43c49d; --up-soft:rgba(67,196,157,.14); --down:#f06f5e; --down-soft:rgba(240,111,94,.14); --warn:#e6c65a;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#eef1ef; --panel:#ffffff; --panel2:#f5f7f5; --ink:#132029; --muted:#586a73; --line:#d2dbda;
+  --accent:#a8660f; --accent-soft:rgba(168,102,15,.10);
+  --up:#15805f; --up-soft:rgba(21,128,95,.10); --down:#c23d2f; --down-soft:rgba(194,61,47,.10); --warn:#9a7a07;
+  color-scheme:light; }}
+:root[data-theme="light"]{
+  --bg:#eef1ef; --panel:#ffffff; --panel2:#f5f7f5; --ink:#132029; --muted:#586a73; --line:#d2dbda;
+  --accent:#a8660f; --accent-soft:rgba(168,102,15,.10);
+  --up:#15805f; --up-soft:rgba(21,128,95,.10); --down:#c23d2f; --down-soft:rgba(194,61,47,.10); --warn:#9a7a07;
+  color-scheme:light; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:.01em}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* masthead */
+.mast{display:grid;grid-template-columns:1fr auto;gap:16px 24px;align-items:end;padding-block:28px 18px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--display);font-weight:900;font-size:clamp(44px,8vw,96px);line-height:.86;text-transform:uppercase;letter-spacing:-.005em}
+.brand .amp{color:var(--accent);display:inline-block;animation:drip 3.2s ease-in-out infinite}
+@keyframes drip{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.edmeta{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;align-items:center}
+.edpill{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.clocks{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.clock{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:112px}
+.clock .city{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+.clock .t{font-family:var(--mono);font-size:18px;font-weight:600}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dot.open{background:var(--up);box-shadow:0 0 0 0 var(--up);animation:ping 1.8s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(67,196,157,.6)}100%{box-shadow:0 0 0 8px rgba(67,196,157,0)}}
+
+/* tape */
+.tape{overflow:hidden;border-bottom:1px solid var(--line);background:var(--panel);margin-inline:-20px}
+.tape-in{display:flex;gap:36px;width:max-content;padding:10px 0;animation:tape 48s linear infinite}
+.tape:hover .tape-in{animation-play-state:paused}
+@keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-family:var(--mono);font-size:13px;white-space:nowrap;display:flex;gap:8px}
+.ti b{color:var(--muted);font-weight:500}
+
+/* lead */
+.lead{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;padding-block:32px;border-bottom:1px solid var(--line)}
+.lead h1{font-size:clamp(34px,5vw,60px);line-height:.98;font-weight:800;text-transform:uppercase}
+.lead h1 em{font-style:normal;color:var(--accent)}
+.dek{font-size:19px;color:var(--ink);opacity:.9;max-width:62ch;margin-top:14px}
+.verdict{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.verdict h3{font-size:22px;text-transform:uppercase;margin-bottom:10px}
+.vrow{display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.vrow:first-of-type{border-top:0}
+.vrow .a{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.bias{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.b-up{background:var(--up-soft);color:var(--up)} .b-down{background:var(--down-soft);color:var(--down)} .b-flat{background:var(--accent-soft);color:var(--accent)}
+
+section{padding-block:36px;border-bottom:1px solid var(--line)}
+.shead{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.shead h2{font-size:clamp(28px,3.6vw,40px);text-transform:uppercase;font-weight:800}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg);font-weight:600}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform .2s, border-color .2s;text-align:left;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.card .nm{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card .px{font-family:var(--mono);font-size:26px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+.card .u{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card .ch{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chg{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:5px;font-variant-numeric:tabular-nums}
+.chg.up{background:var(--up-soft);color:var(--up)} .chg.dn{background:var(--down-soft);color:var(--down)} .chg.na{background:var(--panel2);color:var(--muted)}
+.card .note{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.4}
+.card::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:var(--w,0%);background:var(--c,var(--accent));transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+
+.chart{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;overflow-x:auto}
+.bars{display:grid;gap:8px;min-width:520px}
+.brow{display:grid;grid-template-columns:120px 1fr 70px;gap:12px;align-items:center;font-family:var(--mono);font-size:12px}
+.track{position:relative;height:18px;background:linear-gradient(to right,transparent calc(50% - .5px),var(--line) calc(50% - .5px),var(--line) calc(50% + .5px),transparent calc(50% + .5px))}
+.bar{position:absolute;top:2px;height:14px;border-radius:3px;transition:all .8s cubic-bezier(.2,.8,.2,1)}
+.bval{text-align:right;font-variant-numeric:tabular-nums}
+.axis{display:grid;grid-template-columns:120px 1fr 70px;gap:12px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:6px;min-width:520px}
+.axis .ticks{display:flex;justify-content:space-between}
+
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;position:relative}
+.node{position:relative;padding:14px 12px 14px 0;min-width:0}
+.node .n{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;background:var(--panel2);border:1px solid var(--line);position:relative;z-index:1;transition:all .4s}
+.node.lit .n{background:var(--accent);color:var(--bg);border-color:var(--accent);box-shadow:0 0 0 6px var(--accent-soft)}
+.node .line{position:absolute;top:33px;left:38px;right:0;height:2px;background:var(--line);overflow:hidden}
+.node .line::after{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .6s ease}
+.node.lit .line::after{transform:scaleX(1)}
+.node:last-child .line{display:none}
+.node h4{font-family:var(--display);font-size:20px;text-transform:uppercase;margin:12px 0 4px;line-height:1}
+.node p{font-size:14px;color:var(--muted);margin:0;line-height:1.4}
+.node .k{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:6px}
+.replay{margin-top:14px}
+.btn{border:1px solid var(--line);background:var(--panel);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:var(--mono);font-size:12px}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* stories */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;padding:5px 11px;border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.stories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0;animation:rise .5s ease both}
+@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.story .tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--panel2);color:var(--muted)}
+.impact{font-family:var(--mono);font-size:10px;margin-left:auto;color:var(--muted)}
+.impact i{display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--line);margin-left:2px}
+.impact i.on{background:var(--accent)}
+.story h3{font-size:26px;line-height:1.02;text-transform:uppercase;font-weight:800}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:7px 10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.pane{font-size:15.5px;max-width:65ch}
+.pane p{margin:0 0 8px}
+.pane ul{margin:0;padding-left:18px}
+.pane li{margin-bottom:6px}
+.src{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.src a{color:var(--muted)}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.day{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.day.today{border-color:var(--accent)}
+.day .dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.day .dh b{font-family:var(--display);font-size:24px;text-transform:uppercase}
+.ev{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;cursor:pointer}
+.ev:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.ev .et{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.ev .en{font-weight:600;font-size:14.5px;line-height:1.3;margin:2px 0}
+.ev .ec{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ev .ex{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+.hi{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:1px 6px;border-radius:4px;margin-left:4px;vertical-align:middle}
+.hi.h{background:var(--down-soft);color:var(--down)} .hi.m{background:var(--accent-soft);color:var(--accent)}
+.later{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.later .l{background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:14px}
+.later .l b{font-family:var(--mono);color:var(--accent);font-size:12px;margin-right:8px}
+
+/* scenarios */
+.scen{display:grid;grid-template-columns:320px 1fr;gap:18px}
+.slist{display:flex;flex-direction:column;gap:10px}
+.sbtn{text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:14px;cursor:pointer}
+.sbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.sbtn b{font-family:var(--display);font-size:22px;text-transform:uppercase;display:block}
+.sbtn span{font-size:14px;color:var(--muted)}
+.matrix{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.mgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mcell{background:var(--panel2);border-radius:10px;padding:12px;text-align:center;transition:background .4s}
+.mcell .ma{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mcell .mv{font-family:var(--display);font-size:34px;line-height:1.1;transition:transform .4s}
+.mcell.up .mv{color:var(--up)} .mcell.dn .mv{color:var(--down)} .mcell.fl .mv{color:var(--accent)}
+.mcell.up{background:var(--up-soft)} .mcell.dn{background:var(--down-soft)}
+.mwhy{margin-top:14px;font-size:15px;max-width:70ch}
+
+/* levels */
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:620px;font-size:14px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.mono{font-size:13px}
+tr:last-child td{border-bottom:0}
+
+.foot{padding-block:28px;font-size:13px;color:var(--muted)}
+.foot ol{padding-left:18px;columns:2;column-gap:32px}
+.foot li{margin-bottom:4px;break-inside:avoid}
+.foot a{color:var(--muted)}
+.disc{margin-top:16px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:13px}
+
+@media (max-width:960px){
+  .lead,.scen{grid-template-columns:1fr}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cal{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chain{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:12px}
+  .node:nth-child(3n) .line{display:none}
+  .stories{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .wrap{padding-inline:16px}
+  .tape{margin-inline:-16px}
+  .mast{grid-template-columns:1fr}
+  .clocks{justify-content:flex-start}
+  .board,.cal{grid-template-columns:1fr}
+  .chain{grid-template-columns:1fr}
+  .node{padding-left:52px;padding-right:0}
+  .node .n{position:absolute;left:0;top:14px}
+  .node .line{display:none}
+  .node h4{margin-top:0}
+  .mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .foot ol{columns:1}
+  .vrow{grid-template-columns:80px 1fr auto}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">Commodities desk · oil · gas · gold · silver · dollar · crypto</div>
+      <div class="brand">Barrel <span class="amp">&amp;</span> Bullion</div>
+      <div class="edmeta">
+        <span class="edpill" id="edName"></span>
+        <span class="mono" id="edDate" style="font-size:13px"></span>
+        <span class="mono" style="font-size:12px;color:var(--muted)" id="edNext"></span>
+      </div>
+    </div>
+    <div class="clocks" id="clocks" aria-label="Market session clocks"></div>
+  </header>
+
+  <div class="tape" aria-label="Price tape"><div class="tape-in" id="tape"></div></div>
+
+  <div class="lead">
+    <div>
+      <div class="eyebrow" id="leadKicker"></div>
+      <h1 id="leadHead"></h1>
+      <p class="dek" id="leadDek"></p>
+    </div>
+    <aside class="verdict">
+      <h3>Desk bias · next few sessions</h3>
+      <div id="verdict"></div>
+      <div class="src" style="margin-top:10px">Desk view, not a forecast. Updated every edition.</div>
+    </aside>
+  </div>
+
+  <section id="board-sec">
+    <div class="shead">
+      <div><div class="eyebrow">Tap a card to filter the stories</div><h2>The market board</h2></div>
+      <div class="seg" role="group" aria-label="Change period">
+        <button data-p="d" aria-pressed="true">1 day</button><button data-p="m" aria-pressed="false">1 month</button><button data-p="y" aria-pressed="false">1 year</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+    <div class="chart">
+      <div class="eyebrow" id="chartTitle" style="margin-bottom:12px"></div>
+      <div class="bars" id="bars"></div>
+      <div class="axis"><span></span><div class="ticks" id="ticks"></div><span></span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><div><div class="eyebrow">Why everything moved together</div><h2>The chain reaction</h2></div></div>
+    <div class="chain" id="chain"></div>
+    <div class="replay"><button class="btn" id="replay">Replay the chain</button></div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <div><div class="eyebrow">What happened · why · what comes next</div><h2>Today's dispatches</h2></div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="stories" id="stories"></div>
+  </section>
+
+  <section>
+    <div class="shead"><div><div class="eyebrow">Times in Pakistan (PKT) · tap an event for the playbook</div><h2>The week's calendar</h2></div></div>
+    <div class="cal" id="cal"></div>
+    <div class="later" id="later"></div>
+  </section>
+
+  <section>
+    <div class="shead"><div><div class="eyebrow">Pick a path · desk analysis</div><h2>Three roads from here</h2></div></div>
+    <div class="scen">
+      <div class="slist" id="slist"></div>
+      <div class="matrix"><div class="mgrid" id="mgrid"></div><p class="mwhy" id="mwhy"></p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><div><div class="eyebrow">Numbers the desk is watching</div><h2>Levels to watch</h2></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Market</th><th>Level</th><th>Why it matters</th></tr></thead><tbody id="levels"></tbody></table></div>
+  </section>
+
+  <footer class="foot">
+    <div class="eyebrow" style="margin-bottom:8px">Sources for this edition</div>
+    <ol id="sources"></ol>
+    <div class="disc">Barrel &amp; Bullion is a news digest compiled by Claude from public reporting. Prices are indicative snapshots at press time and move constantly. Bias, scenarios and "what next" sections are analysis, not financial advice. Check live quotes before trading.</div>
+  </footer>
+</div>
+
+<script>
+/* ===== EDITION DATA — each edition replaces this block ===== */
+const EDITION = {
+  name: "Evening Edition",
+  date: "Tuesday, 29 September 2026",
+  pressTime: "18:00 PKT",
+  next: "Next: Morning Edition, 08:00 PKT",
+  todayKey: "Tue",
+  kicker: "Since the Midday Edition · European session · US pre-market · New York open ahead",
+  headline: "Oil <em>slides</em> as the US reply to Iran is delayed",
+  dek: "The formal US response to Iran's plan to reopen the Strait of Hormuz, expected today, had not arrived by the European afternoon. Oil still fell about 2%: expiring November Brent is near $103.5 and WTI near $90.7, as traders pointed to Gulf flows recovering and Saudi Arabia's East-West pipeline running again. European gas dropped 5% to a one-month low. US yields paused just under 19-year highs, gold extended its bounce to about $4,150, and the dollar held near 101.3. Next up: US job openings and consumer confidence at 19:00 PKT, then Fed speakers.",
+  verdict: [
+    ["Oil","Sliding on delay, not a deal; headline risk both ways tonight","down","Soft"],
+    ["Nat gas","TTF at 1-month low on weak China LNG demand; storage still thin","down","Soft"],
+    ["Gold","Bounce extends, but PCE and 5.2% yields cap it","flat","Range"],
+    ["Silver","Lagging gold; barely positive","flat","Range"],
+    ["Dollar","DXY ~101.35, near 2-month high; euro weaker","up","Firm"],
+    ["BTC / ETH","Slipping below $83k; ETF inflows the cushion","flat","Range"]
+  ],
+  assets: [
+    {id:"brent",nm:"Brent crude",px:103.48,dp:2,pre:"$",u:"per barrel · Nov (expires Wed)",d:-1.71,m:14.36,y:56.72,tag:"oil",note:"Dec contract trades lower, near $97–98"},
+    {id:"wti",nm:"WTI crude",px:90.69,dp:2,pre:"$",u:"per barrel · Nov",d:-2.07,m:null,y:45.40,tag:"oil",note:"Gave back Monday's small gain"},
+    {id:"hh",nm:"US nat gas (HH)",px:3.11,dp:2,pre:"$",u:"per MMBtu",d:0.11,m:5.94,y:-5.86,tag:"gas",note:"Mountaineer XPress pipeline return adds supply"},
+    {id:"ttf",nm:"EU gas (TTF)",px:69.50,dp:2,pre:"€",u:"per MWh",d:-5.12,m:-0.44,y:121.27,tag:"gas",note:"Lowest in a month; weaker Chinese LNG demand"},
+    {id:"gold",nm:"Gold",px:4154,dp:0,pre:"$",u:"per troy oz",d:0.94,m:-6.47,y:7.63,tag:"metals",note:"Second day of bounce off lowest since 5 Aug"},
+    {id:"silver",nm:"Silver",px:60.78,dp:2,pre:"$",u:"per troy oz",d:0.26,m:-8.57,y:30.27,tag:"metals",note:"Down ~9% on the week"},
+    {id:"btc",nm:"Bitcoin",px:82984,dp:0,pre:"$",u:"approx. spot",d:-0.61,m:6.83,y:-27.23,tag:"crypto",note:"Back under $83k; −3.7% on the week"},
+    {id:"eth",nm:"Ether",px:2670,dp:0,pre:"$",u:"approx. spot",d:-0.69,m:10.43,y:-35.59,tag:"crypto",note:"Gave back the Asia-session gain"}
+  ],
+  extraTape: [["US 10Y","5.21–5.23%","paused below 19-yr high"],["US 30Y","5.55%",""],["DXY","101.35","+0.15% today"],["Fed funds","3.75–4.00%","Oct hike ~70%"],["EUR/USD","1.1346","−0.22%"],["USD/JPY","157.3–157.5","flat"],["Brent–WTI","~$13","wide spread"]],
+  chain: [
+    ["Reply delayed","The US answer to Iran's Hormuz plan, due today via Qatar, had not arrived.","Iran threatens infrastructure"],
+    ["Flows look better","Analysts say Gulf oil flows are back above 90% of pre-war; Saudi pipeline running.","East-West ≥3.5m b/d"],
+    ["Oil slips ~2%","Expiring Nov Brent falls toward $103.5; WTI toward $90.7.","Dec Brent ~$97–98"],
+    ["Gas follows","TTF drops 5% to a one-month low as China buys less LNG.","~€69.5/MWh"],
+    ["Yields pause","US 10Y eases to ~5.21% after Monday's 19-year high.","Oct hike odds ~70%"],
+    ["Metals breathe","Gold bounces ~0.9% to ~$4,150; dollar stays firm.","PCE Wed is the test"]
+  ],
+  stories: [
+    {tag:"oil",tags:["Oil","Geopolitics"],impact:5,
+     h:"Oil falls 2% as the US reply on Hormuz slips and Gulf flows recover",
+     happened:"<p>Iran said it expected Washington's formal answer to its plan to reopen the Strait of Hormuz on Tuesday, delivered through Qatar. By the European afternoon it had not arrived. Iran's plan asks for a seven-day regional ceasefire including Lebanon, unfrozen assets, lifted oil sanctions and an end to the US naval blockade, with nuclear talks starting by day seven. A US official said there will be no agreement unless the nuclear programme is addressed.</p><p>Oil fell anyway. November Brent, which expires Wednesday, is near $103.48, down 1.7% from Monday's $105.28 settlement. WTI is near $90.69, down 2.1%. The December Brent contract is trading lower, around $97–98.</p>",
+     why:"<p>Two things are weighing on crude. Physical supply looks better than the headlines: some analysts say oil flows out of the Gulf are back above 90% of pre-war levels, and Saudi Arabia has restored about half of its East-West pipeline, moving at least 3.5 million barrels a day to the Red Sea. And contract expiry is forcing traders to close positions.</p><p>The risk is still there. Iran's foreign minister warned it could target regional infrastructure if its security is not guaranteed, and Tehran has said privately it doubts a deal before the US midterms.</p>",
+     days:"<ul><li>The US reply could land tonight or tomorrow. A reply that opens talks would likely push Brent lower; a flat rejection plus Iranian threats would likely reverse today's drop (analysis).</li><li>API inventories tonight (~01:30 PKT) and EIA on Wednesday.</li><li>November Brent expires Wednesday; expect the front-month quote to jump down to the December price.</li></ul>",
+     months:"<ul><li>3 November midterms: reports of possible US strikes after the vote keep a floor under oil.</li><li>If flows keep normalising and a framework is reached, the war premium could shrink quickly (analysis).</li></ul>",
+     src:[0,1,2,4,5,6]},
+    {tag:"gas",tags:["Nat gas","Europe"],impact:4,
+     h:"European gas drops 5% to a one-month low",
+     happened:"<p>EU gas (TTF) fell 5.1% to about €69.50/MWh, its lowest in a month. Trading Economics links the drop to weaker Chinese demand: China's LNG imports are expected to fall for a second month because prices are so high. TTF is now down slightly over the month but still about 121% above a year ago.</p><p>US Henry Hub is flat near $3.11/MMBtu.</p>",
+     why:"<p>Less Chinese buying frees up LNG cargoes for Europe. But the storage picture has not changed: Europe is about 71% full against a five-year average of 87%, and Germany about 57%. QatarEnergy's force majeure on deliveries to Italy runs through December.</p><p>In the US, the return of the Mountaineer XPress pipeline adds supply, offsetting strong LNG export demand.</p>",
+     days:"<ul><li>Hormuz headlines tonight move TTF more than any other market.</li><li>Thursday's EIA storage report for Henry Hub.</li></ul>",
+     months:"<ul><li>Trading Economics models TTF near €91 in 12 months, well above today.</li><li>A cold start to winter with storage this low could bring sharp spikes (analysis).</li></ul>",
+     src:[7,8]},
+    {tag:"rates",tags:["Yields","Fed","US data"],impact:5,
+     h:"Yields pause below a 19-year high as the US opens; data at 19:00 PKT",
+     happened:"<p>The US 10-year yield eased to about 5.21–5.23% after closing Monday at 5.241%, a 19-year high. The 30-year is near 5.55%. US stock futures were mixed ahead of the open: Dow futures down about 0.1%, Nasdaq-100 futures up 0.1%, after Monday's 0.8% fall in the S&P 500.</p><p>No major US data came out at 17:30 PKT today. A US ban on $1 billion of Canadian imports took effect Tuesday.</p>",
+     why:"<p>Lower oil takes a little pressure off inflation fears, which lets bonds bounce. But markets still price about 70% odds of a Fed hike in October.</p>",
+     days:"<ul><li>19:00 PKT: JOLTS job openings (consensus 7.23m vs 7.27m) and Conference Board consumer confidence (consensus 90.1 vs 89.4).</li><li>Fed speakers tonight: Barr, Goolsbee, Williams, Waller.</li><li>Wednesday 17:30 PKT: PCE inflation, the week's biggest risk for yields.</li></ul>",
+     months:"<ul><li>FOMC meets 28 October. A second hike would confirm a tightening cycle driven by the oil shock.</li></ul>",
+     src:[2,3,9,10,18]},
+    {tag:"metals",tags:["Gold","Silver"],impact:4,
+     h:"Gold extends its bounce toward $4,150; silver lags",
+     happened:"<p>Gold is near $4,154 an ounce, up about 0.9% today. Gold futures opened near $4,150, their lowest since 5 August, then climbed as high as about $4,181 in early US trade. Gold is still down about 6.5% in a month and about 26% below January's $5,608 record. Silver is near $60.78, up only 0.3% and down about 9% on the week.</p>",
+     why:"<p>Easier oil and a small dip in yields give gold room to recover. The bigger picture is unchanged: traders price at least one more Fed hike, possibly two, before year-end, and 5%+ yields make metals that pay no interest less attractive.</p>",
+     days:"<ul><li>Hot JOLTS or hawkish Fed talk tonight could send gold back toward Monday's lows near $4,120.</li><li>PCE on Wednesday is the main test.</li></ul>",
+     months:"<ul><li>Trading Economics models gold near $4,290 at quarter-end and silver near $64.</li></ul>",
+     src:[11,12,13]},
+    {tag:"rates",tags:["Dollar","FX"],impact:3,
+     h:"Dollar holds near a two-month high; euro slips",
+     happened:"<p>The dollar index is near 101.35, up 0.15% today and 1.9% over the month. EUR/USD is near 1.1346, down 0.2%. USD/JPY is steady around 157.3–157.5 after Japan's finance minister said Tokyo and Washington would stay in close contact on currency stability.</p>",
+     why:"<p>US yields above 5% and expected Fed hikes keep the dollar in demand, even as oil eases.</p>",
+     days:"<ul><li>Strong US data tonight would likely lift the dollar further.</li><li>Eurozone CPI on Friday is the euro's next big test.</li></ul>",
+     months:"<ul><li>Joint US-Japan action on the yen remains a tail risk for the dollar (analysis).</li></ul>",
+     src:[14,15]},
+    {tag:"crypto",tags:["Bitcoin","Ether"],impact:2,
+     h:"Bitcoin slips back under $83,000",
+     happened:"<p>Bitcoin is near $82,984, down 0.6% on the day and 3.7% on the week, after holding near $83,800 in Asia. Ether is near $2,670, down 0.7%. Both are still up over the month but well down from a year ago.</p>",
+     why:"<p>Crypto is trading with yields and risk appetite. US spot bitcoin ETFs took in about $2.4 billion last week, their strongest week since October 2025, which is helping to limit the fall.</p>",
+     days:"<ul><li>Support about $82,000; resistance about $84,000–85,000.</li><li>PCE and Friday's payrolls are the key tests.</li></ul>",
+     months:"<ul><li>A lasting recovery probably needs the Fed to stop hiking (analysis).</li></ul>",
+     src:[16,17]}
+  ],
+  calendar: [
+    {k:"Tue",d:"29 Sep",ev:[
+      {t:"18:00",n:"US Case-Shiller & FHFA home prices",c:"Jul",i:"m",x:"Minor for commodities unless far off consensus."},
+      {t:"19:00",n:"US JOLTS & consumer confidence",c:"Cons. 7.23m · 90.1",i:"h",x:"Strong numbers support an October hike: dollar up, gold and BTC down."},
+      {t:"Evening",n:"Fed speakers + US reply to Iran",c:"Barr, Goolsbee, Williams, Waller",i:"h",x:"Hawkish talk lifts yields. A US reply that opens talks would push oil lower."},
+      {t:"01:30",n:"API crude inventories",c:"Wed early PKT",i:"m",x:"A big draw would slow oil's slide."}]},
+    {k:"Wed",d:"30 Sep",ev:[
+      {t:"17:30",n:"US PCE inflation (Aug)",c:"Cons. 3.7% y/y · core 3.3%",i:"h",x:"Hot: yields up, gold/silver/BTC down. Soft: relief rally in metals."},
+      {t:"19:30",n:"EIA crude inventories",c:"Plus Nov Brent expiry",i:"m",x:"Front-month Brent will switch to December, which trades several dollars lower."}]},
+    {k:"Thu",d:"1 Oct",ev:[
+      {t:"19:00",n:"US ISM manufacturing (Sep)",c:"Activity & prices paid",i:"m",x:"Prices paid shows how much oil is feeding into costs."},
+      {t:"19:30",n:"EIA natural gas storage",c:"Weekly injection",i:"m",x:"A small injection supports Henry Hub."}]},
+    {k:"Fri",d:"2 Oct",ev:[
+      {t:"14:00",n:"Eurozone CPI flash (Sep)",c:"Est. 3.7% y/y vs 3.2% prior",i:"m",x:"A hot print supports the euro and ECB hike talk."},
+      {t:"17:30",n:"US nonfarm payrolls (Sep)",c:"Cons. +90k",i:"h",x:"Weak jobs could cut October hike odds and lift gold. Strong jobs do the opposite."}]},
+    {k:"Mon",d:"5 Oct",ev:[
+      {t:"All day",n:"Weekend Iran / OPEC+ follow-through",c:"Gap risk at open",i:"m",x:"Markets reprice any weekend geopolitical news at the Asia open."}]}
+  ],
+  later: [["28 Oct","FOMC decision · ~70% hike odds"],["3 Nov","US midterm elections · reported strike window after"],["Nov","RBA meeting · another hike possible"],["Dec","Qatar force majeure on Italy deliveries runs to here"]],
+  scenarios: [
+    {id:"deal",nm:"Talks restart",sub:"US reply opens the door to a Hormuz/nuclear framework",
+     m:{Oil:"dn2",Gas:"dn",Gold:"up",Silver:"up",Dollar:"dn",Yields:"dn",BTC:"up",ETH:"up"},
+     why:"Oil loses more of its war premium, inflation fear eases, October hike odds drop, and yields and the dollar retreat. That is the best setup for gold, silver and crypto."},
+    {id:"stall",nm:"Stalemate",sub:"Base case: reply delayed or vague, no deal before the midterms",
+     m:{Oil:"fl",Gas:"fl",Gold:"fl",Silver:"fl",Dollar:"up",Yields:"up",BTC:"fl",ETH:"fl"},
+     why:"Oil chops on headlines as physical flows improve. US data (JOLTS, PCE, payrolls) decides the Fed. Metals and crypto stay in ranges under pressure from high yields."},
+    {id:"esc",nm:"Escalation",sub:"Hard US rejection, Iranian strikes on Gulf infrastructure",
+     m:{Oil:"up2",Gas:"up2",Gold:"mix",Silver:"dn",Dollar:"up",Yields:"up",BTC:"dn",ETH:"dn"},
+     why:"Crude and gas spike. Gold is torn between safe-haven buying and higher yields. Silver and crypto, which trade more like risk assets, likely fall."}
+  ],
+  levels: [
+    ["Brent (Nov)","$100 · $105.28 · $108.83","Round number; Monday's settle; Monday's intraday high. Expires Wed."],
+    ["Brent (Dec)","~$97–98","The new front month from Thursday; watch $95 and $100."],
+    ["WTI","$90 · $96.54","Round-number support; Monday's high."],
+    ["Gold","$4,120 · $4,250","Monday's low area; broken support now resistance."],
+    ["Silver","$60 · $64","Round-number support; TE quarter-end model."],
+    ["US 10Y","5.24%","Monday's close, a 19-year high."],
+    ["DXY","101.11 · 101.80","Recent high being held; June high resistance."],
+    ["Bitcoin","$82k · $85k","Support; resistance."],
+    ["EU storage","71% vs 87%","Current fill vs five-year average."]
+  ],
+  sources: [
+    ["Trading Economics · Brent crude","https://tradingeconomics.com/commodity/brent-crude-oil"],
+    ["DTN · Oil rally fades as contract expiry looms","https://www.dtnpf.com/agriculture/web/ag/news/world-policy/article/2026/09/28/oil-rally-fades-contract-expiry"],
+    ["TheStreet · Stock market today, 29 Sep","https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-29-2026"],
+    ["Quartz · Futures mixed, yields at decade highs","https://qz.com/stock-futures-mixed-treasury-yields-decade-highs-092926"],
+    ["Khaleej Times · Iran war live, 29 Sep","https://www.khaleejtimes.com/world/mena/us-israel-iran-lebanon-war-live-updates-september-29-2026"],
+    ["Al Jazeera · Araghchi meets Qatari mediators","https://www.aljazeera.com/news/2026/9/29/irans-araghchi-meets-qatari-mediators-as-us-insists-on-nuclear-talks"],
+    ["Malay Mail · Tehran awaits US response","https://www.malaymail.com/news/world/2026/09/29/tehran-awaits-us-response-as-hormuz-reopening-talks-enter-key-stage/236998"],
+    ["Trading Economics · EU natural gas","https://tradingeconomics.com/commodity/eu-natural-gas"],
+    ["Trading Economics · US natural gas","https://tradingeconomics.com/commodity/natural-gas"],
+    ["Trading Economics · US 10Y yield","https://tradingeconomics.com/united-states/government-bond-yield"],
+    ["Investing.com · Data due Tuesday","https://www.investing.com/news/stock-market-news/jolts-job-openings-and-consumer-confidence-among-data-due-tuesday-93CH-4920970"],
+    ["Trading Economics · Gold","https://tradingeconomics.com/commodity/gold"],
+    ["Yahoo Finance · Gold price today, 29 Sep","https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-tuesday-september-29-2026-gold-opens-near-2-month-low-but-brent-crude-also-moving-lower-104439751.html"],
+    ["Trading Economics · Silver","https://tradingeconomics.com/commodity/silver"],
+    ["Trading Economics · US dollar index","https://tradingeconomics.com/united-states/currency"],
+    ["Trading Economics · Japanese yen","https://tradingeconomics.com/japan/currency"],
+    ["Trading Economics · Crypto","https://tradingeconomics.com/crypto"],
+    ["CoinDesk · Bitcoin price","https://www.coindesk.com/price/bitcoin"],
+    ["Babypips · Market recap, 28 Sep","https://www.babypips.com/news/financial-forex-market-recap-2026-09-28"]
+  ]
+};
+/* ===== END EDITION DATA ===== */
+
+const $=s=>document.querySelector(s);
+const fmt=(v,dp)=>v.toLocaleString("en-US",{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const sgn=v=>v==null?"n/a":(v>0?"+":"")+v.toFixed(2)+"%";
+const cls=v=>v==null?"na":(v>=0?"up":"dn");
+const E=EDITION;
+
+/* masthead */
+$("#edName").textContent=E.name;
+$("#edDate").textContent=E.date+" · press time "+E.pressTime;
+$("#edNext").textContent=E.next;
+$("#leadKicker").textContent=E.kicker;
+$("#leadHead").innerHTML=E.headline;
+$("#leadDek").textContent=E.dek;
+$("#verdict").innerHTML=E.verdict.map(v=>`<div class="vrow"><span class="a">${v[0]}</span><span>${v[1]}</span><span class="bias b-${v[2]}">${v[2]==="up"?"▲":v[2]==="down"?"▼":"◆"} ${v[3]}</span></div>`).join("");
+
+/* clocks: sessions in local exchange time */
+const SESS=[["Karachi","Asia/Karachi",[9.5,15.5]],["Tokyo","Asia/Tokyo",[9,15]],["London","Europe/London",[8,16.5]],["New York","America/New_York",[9.5,16]]];
+function tick(){
+  const now=new Date();
+  $("#clocks").innerHTML=SESS.map(([c,tz,[o,cl]])=>{
+    const parts=new Intl.DateTimeFormat("en-GB",{timeZone:tz,hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(now);
+    const g=t=>parts.find(p=>p.type===t)?.value;
+    const h=+g("hour")%24+ +g("minute")/60, wd=g("weekday");
+    const open=!["Sat","Sun"].includes(wd)&&h>=o&&h<cl;
+    return `<div class="clock"><div class="city"><span class="dot ${open?"open":""}"></span>${c} · ${open?"open":"closed"}</div><div class="t">${g("hour")}:${g("minute")}</div></div>`;
+  }).join("");
+}
+tick(); setInterval(tick,30000);
+
+/* tape */
+const tapeItems=E.assets.map(a=>`<span class="ti"><b>${a.nm}</b>${a.pre}${fmt(a.px,a.dp)} <span class="chg ${cls(a.d)}">${sgn(a.d)}</span></span>`)
+  .concat(E.extraTape.map(t=>`<span class="ti"><b>${t[0]}</b>${t[1]} <span style="color:var(--muted)">${t[2]}</span></span>`)).join("");
+$("#tape").innerHTML=tapeItems+tapeItems;
+
+/* board */
+let filter="all";
+$("#board").innerHTML=E.assets.map(a=>`<button class="card" data-tag="${a.tag}" aria-pressed="false" id="c-${a.id}">
+  <div class="nm">${a.nm}</div><div class="px" data-v="${a.px}" data-dp="${a.dp}" data-pre="${a.pre}">${a.pre}${fmt(a.px,a.dp)}</div><div class="u">${a.u}</div>
+  <div class="ch"><span class="chg ${cls(a.d)}">1D ${sgn(a.d)}</span><span class="chg ${cls(a.m)}">1M ${sgn(a.m)}</span><span class="chg ${cls(a.y)}">1Y ${sgn(a.y)}</span></div>
+  <div class="note">${a.note}</div></button>`).join("");
+function countUp(){
+  document.querySelectorAll(".px").forEach(el=>{
+    const v=+el.dataset.v,dp=+el.dataset.dp,pre=el.dataset.pre,t0=performance.now(),dur=1100;
+    if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+    const step=t=>{const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=pre+fmt(v*(0.94+0.06*e),dp);if(k<1)requestAnimationFrame(step);else el.textContent=pre+fmt(v,dp)};
+    requestAnimationFrame(step);
+  });
+}
+countUp();
+document.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>{
+  const t=c.dataset.tag; setFilter(filter===t?"all":t);
+  document.getElementById("stories").scrollIntoView({behavior:"smooth",block:"start"});
+}));
+
+/* bar chart */
+const PL={d:"1-day change, %",m:"1-month change, %",y:"1-year change, %"};
+function bars(p){
+  const vals=E.assets.map(a=>a[p]).filter(v=>v!=null);
+  const maxAbs=Math.max(...vals.map(Math.abs));
+  const nice=[2,5,10,20,25,50,75,100,150,200].find(n=>n>=maxAbs)||Math.ceil(maxAbs/50)*50;
+  $("#chartTitle").textContent=PL[p]+(E.assets.some(a=>a[p]==null)?" · n/a where no reliable figure":"");
+  $("#bars").innerHTML=E.assets.map(a=>{
+    const v=a[p]; if(v==null) return `<div class="brow"><span>${a.nm}</span><div class="track"></div><span class="bval" style="color:var(--muted)">n/a</span></div>`;
+    const w=Math.abs(v)/nice*50, left=v>=0?50:50-w;
+    return `<div class="brow"><span>${a.nm}</span><div class="track"><div class="bar" data-l="${left}" data-w="${w}" style="left:50%;width:0;background:var(--${v>=0?"up":"down"})"></div></div><span class="bval" style="color:var(--${v>=0?"up":"down"})">${sgn(v)}</span></div>`;
+  }).join("");
+  $("#ticks").innerHTML=[-nice,-nice/2,0,nice/2,nice].map(n=>`<span>${n>0?"+":""}${n}%</span>`).join("");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll(".bar").forEach(b=>{b.style.left=b.dataset.l+"%";b.style.width=b.dataset.w+"%"})));
+  E.assets.forEach(a=>{const el=document.getElementById("c-"+a.id);const v=a[p];el.style.setProperty("--w",v==null?"0%":Math.min(100,Math.abs(v)/nice*100)+"%");el.style.setProperty("--c",v==null?"var(--line)":`var(--${v>=0?"up":"down"})`)});
+}
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));bars(b.dataset.p);
+}));
+bars("d");
+
+/* chain */
+$("#chain").innerHTML=E.chain.map((c,i)=>`<div class="node lit"><div class="n">${i+1}</div><div class="line"></div><h4>${c[0]}</h4><p>${c[1]}</p><div class="k">${c[2]}</div></div>`).join("");
+function playChain(){
+  const ns=[...document.querySelectorAll(".node")];
+  ns.forEach(n=>n.classList.remove("lit"));
+  ns.forEach((n,i)=>setTimeout(()=>n.classList.add("lit"),250+i*550));
+}
+$("#replay").addEventListener("click",playChain);
+setTimeout(playChain,600);
+
+/* stories */
+const TAGS=[["all","All"],["oil","Oil"],["gas","Gas"],["metals","Gold & silver"],["rates","Dollar & yields"],["crypto","Crypto"]];
+$("#filters").innerHTML=TAGS.map(t=>`<button class="chip" data-f="${t[0]}" aria-pressed="${t[0]==="all"}">${t[1]}</button>`).join("");
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>setFilter(c.dataset.f)));
+function setFilter(f){
+  filter=f;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.f===f));
+  document.querySelectorAll(".card").forEach(c=>c.setAttribute("aria-pressed",c.dataset.tag===f));
+  renderStories();
+}
+const TABS=[["happened","What happened"],["why","Why"],["days","Next few days"],["months","Next months"]];
+function renderStories(){
+  const list=E.stories.filter(s=>filter==="all"||s.tag===filter);
+  $("#stories").innerHTML=list.map((s,si)=>`<article class="story" style="animation-delay:${si*60}ms">
+    <div class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join("")}<span class="impact" title="Market impact">impact ${[1,2,3,4,5].map(n=>`<i class="${n<=s.impact?"on":""}"></i>`).join("")}</span></div>
+    <h3>${s.h}</h3>
+    <div class="tabs" role="tablist">${TABS.map((t,i)=>`<button role="tab" aria-selected="${i===0}" data-k="${t[0]}">${t[1]}</button>`).join("")}</div>
+    <div class="pane">${s.happened}</div>
+    <div class="src">Sources: ${s.src.map(i=>`<a href="${E.sources[i][1]}" target="_blank" rel="noopener">${E.sources[i][0].split(" · ")[0]}</a>`).join(", ")}</div>
+  </article>`).join("")||`<p>No dispatches for this market in this edition.</p>`;
+  document.querySelectorAll(".story").forEach((el,idx)=>{
+    const s=list[idx];
+    el.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+      el.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+      el.querySelector(".pane").innerHTML=s[b.dataset.k];
+    }));
+  });
+}
+renderStories();
+
+/* calendar */
+$("#cal").innerHTML=E.calendar.map(d=>`<div class="day ${d.k===E.todayKey?"today":""}"><div class="dh"><b>${d.k}</b><span class="mono" style="font-size:12px;color:var(--muted)">${d.d}${d.k===E.todayKey?" · today":""}</span></div>
+  ${d.ev.map(e=>`<div class="ev" tabindex="0"><div class="et">${e.t} PKT <span class="hi ${e.i}">${e.i==="h"?"HIGH":"MED"}</span></div><div class="en">${e.n}</div><div class="ec">${e.c}</div><div class="ex" hidden>${e.x}</div></div>`).join("")}</div>`).join("");
+document.querySelectorAll(".ev").forEach(ev=>{const t=()=>{const x=ev.querySelector(".ex");x.hidden=!x.hidden};ev.addEventListener("click",t);ev.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t()}})});
+$("#later").innerHTML=E.later.map(l=>`<div class="l"><b>${l[0]}</b>${l[1]}</div>`).join("");
+
+/* scenarios */
+const SYM={up:["▲","up"],up2:["▲▲","up"],dn:["▼","dn"],dn2:["▼▼","dn"],fl:["◆","fl"],mix:["▲▼","fl"]};
+$("#slist").innerHTML=E.scenarios.map((s,i)=>`<button class="sbtn" data-i="${i}" aria-pressed="${i===1}"><b>${s.nm}</b><span>${s.sub}</span></button>`).join("");
+function scen(i){
+  const s=E.scenarios[i];
+  document.querySelectorAll(".sbtn").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.i===i));
+  $("#mgrid").innerHTML=Object.entries(s.m).map(([k,v],j)=>`<div class="mcell ${SYM[v][1]}"><div class="ma">${k}</div><div class="mv" style="animation:rise .4s ${j*40}ms both">${SYM[v][0]}</div></div>`).join("");
+  $("#mwhy").textContent=s.why;
+}
+document.querySelectorAll(".sbtn").forEach(b=>b.addEventListener("click",()=>scen(+b.dataset.i)));
+scen(1);
+
+/* levels + sources */
+$("#levels").innerHTML=E.levels.map(l=>`<tr><td><b>${l[0]}</b></td><td class="mono">${l[1]}</td><td>${l[2]}</td></tr>`).join("");
+$("#sources").innerHTML=E.sources.map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join("");
+</script>
+
+
+</body></html>
