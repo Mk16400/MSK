@@ -28,6 +28,9 @@ def js_ok(text):
     return subprocess.run(["node", "--check", p]).returncode == 0
 
 def main():
+    # Drive feed is switched off: editions are now pushed from Mughees's computer.
+    if not os.path.exists("FEED_ENABLED"):
+        print("Drive feed disabled; nothing to do."); return
     state = json.load(open(STATE)) if os.path.exists(STATE) else {}
     items = listing()
     print(f"feed files seen: {len(items)}")
