@@ -128,6 +128,12 @@ const EDITION = {
     ["Bitcoin","$82k · $85k","Support; resistance."],
     ["EU storage","71% vs 87%","Current fill vs five-year average."]
   ],
+  wire: [
+    {d:"30 Sep",tag:"Oil",h:"Latest Oil Market News and Analysis for Sept. 30",url:"https://www.bloomberg.com/news/articles/2026-09-29/latest-oil-market-news-and-analysis-for-sept-30",why:"Bloomberg's running oil blog for today: the place to follow Hormuz and pipeline headlines as they break."},
+    {d:"29 Sep",tag:"Gold",h:"Gold Steady as Traders Weigh Lower Oil Against Higher Yields",url:"https://www.bloomberg.com/news/articles/2026-09-29/gold-steady-as-traders-weigh-lower-oil-against-higher-yields",why:"The same tug-of-war as our chain reaction: cheaper oil helps gold, 5%+ yields hurt it."},
+    {d:"28 Sep",tag:"Rates",h:"Key US Data This Week Seen Bolstering Case for October Rate Hike",url:"https://www.bloomberg.com/news/articles/2026-09-28/key-us-data-this-week-seen-bolstering-case-for-october-rate-hike",why:"Why today's PCE and Friday's payrolls matter so much for metals, crypto and the dollar."},
+    {d:"28 Sep",tag:"Gas",h:"Europe Draws More LNG as Hormuz Crisis Tightens Global Market",url:"https://www.bloomberg.com/news/articles/2026-09-28/europe-draws-more-lng-as-hormuz-crisis-tightens-global-market",why:"Europe is outbidding others for cargoes to refill low storage before winter."}
+  ],
   sources: [
     ["Trading Economics · Brent crude","https://tradingeconomics.com/commodity/brent-crude-oil"],
     ["Trading Economics · WTI crude","https://tradingeconomics.com/commodity/crude-oil"],
